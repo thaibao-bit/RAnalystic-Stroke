@@ -1,0 +1,15 @@
+"0","# Numeric Feature Table by Stroke Status
+datasummary((Age + 
+              `Average Glucose Level` +
+              BMI)*Stroke ~ 
+              n + 
+              Mean*Arguments(na.rm = TRUE) + 
+              Median*Arguments(na.rm = TRUE) + 
+              SD*Arguments(na.rm = TRUE),
+              data = df_train %>%
+              rename(`Average Glucose Level` = Avg_glucose_level), 
+            title = ""Characteristics by Stroke Status"") %>%
+  kable_classic()
+"
+"2","Error in kable_classic(.) : could not find function ""kable_classic""
+"

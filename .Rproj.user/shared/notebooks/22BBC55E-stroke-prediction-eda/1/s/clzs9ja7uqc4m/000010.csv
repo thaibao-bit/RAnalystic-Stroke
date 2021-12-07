@@ -1,0 +1,6 @@
+"0","# Data
+df1 <- read_csv(""/home/bao/DataAnalysis/stroke-data.csv"")
+"
+"2","Error in read_csv(""/home/bao/DataAnalysis/stroke-data.csv"") : 
+  could not find function ""read_csv""
+"
