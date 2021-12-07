@@ -68,21 +68,28 @@ stroke$smoking_status <- factor(stroke$smoking_status)
 print(strokedBMI)
 
 
-ui = navbarPage("Navbar!",
+ui = navbarPage("Stroke!",
             tabPanel("Introduction",
-                                    titlePanel("Introduction"),
+                                    titlePanel(h1(id="big-heading","Introduction")),
 
                                     mainPanel(
-                                      h1("Báo cáo chuyên đề: Đề tài phân tích dữ liệu và dự đoán các ca bệnh đột quỵ"),
+                                      tags$style(HTML("#big-heading{color: #483D8B;}")),
+                                      h1(id = "heading","Báo cáo chuyên đề: Đề tài phân tích dữ liệu và dự đoán các ca bệnh đột quỵ"),
 
-                                      h2("Đột quỵ là gì?"),
+                                      tags$style(HTML("#heading{color: #4B0082;}")),
+
+                                      h3(id = "h3","Nguyen Thai Bao 18IT2 18IT051", align="right"),
+                                      h3(id = "h3","Le Cao Nguyen 18it1 18IT029",align="right"),
+                                      tags$style(HTML("#h3{color: #7B68EE;}")),
+                                      h2(id = "h2","Đột quỵ là gì?"),
+                                      tags$style(HTML("#h2{color: #FF00FF;}")),
                                       p( toString(dotquy2[,1])),
 
-                                      h2("Các yếu tố gây nên đột quỵ?"),
+                                      h2(id = "h2","Các yếu tố gây nên đột quỵ?"),
                                       p( toString(dotquy[,1])),
 
 
-                                      h3("Các triệu chứng nhận biết và điều nên làm?"),
+                                      h3(id = "h2","Các triệu chứng nhận biết và điều nên làm?"),
                                       img(class="img-polaroid",
                                             style="width= 100px; height = 100px",
                                             src="FAST.jpg"),
@@ -92,10 +99,12 @@ ui = navbarPage("Navbar!",
 
             navbarMenu("About data",
                        tabPanel("Table",
+                                h2(id = "h2","Take a look at the data"),
                                 DT::dataTableOutput("table")
                        ),
 
                        tabPanel("Summary",
+                                h2(id = "h2","Summary table"),
                                 verbatimTextOutput("summary")
                        ),
                        tabPanel("Multi Plot",
@@ -105,8 +114,10 @@ ui = navbarPage("Navbar!",
                                 plotOutput("workPie")
                        ),
                        tabPanel("Multi Plot 2",
+                                h2(id = "h2","BoxPlot age of ..."),
                                 sidebarLayout(
                                   sidebarPanel(
+
                                     selectInput(
                                       inputId  = "multi2",
                                       label = "Select plot",
@@ -128,6 +139,8 @@ ui = navbarPage("Navbar!",
             navbarMenu("Some unrelated information",
 
                        tabPanel("Diabetes and BMI",
+                                h2(id = "h2","Diabetes and BMI"),
+
                                 sidebarLayout(
                                   sidebarPanel(
                                     radioButtons("plotType", "Plot type",
@@ -147,9 +160,12 @@ ui = navbarPage("Navbar!",
                        ),
 
                        tabPanel("Hypertension effect to heart dicease?",
+                                h2(id = "h2","Hypertension effect to heart dicease?"),
                                 sidebarLayout(
                                   sidebarPanel(
+
                                     radioButtons(
+
                                       inputId  = "hypertensionToHeart",
                                       label = "Select Hypertenstion",
                                       choices = c("Yes"=1, "No"=0),
@@ -373,7 +389,8 @@ ui = navbarPage("Navbar!",
 
                       mainPanel(
 
-                        textOutput("predict")
+                        verbatimTextOutput("predict"),
+                        verbatimTextOutput("predictSummary")
                       )
                     )
            ),
@@ -495,10 +512,15 @@ server = function(input, output, session) {
 
 
 
+  output$predictSummary <- renderPrint(
+    {
+      summary(model)
+    }
+  )
   output$predict <- renderPrint(
     {
-      model %>% predict(data.frame(gender = as.integer(input$gender_p), age = input$age_p, hypertension = as.integer(input$hypertension_p), heart_disease = as.integer(input$heart_p), work_type =as.integer(input$worktype_p), Residence_type =as.integer(input$residence_p), avg_glucose_level = input$glucose_p, bmi = input$bmi_p), type = "response")*100
-
+      probability <- model %>% predict(data.frame(gender = as.integer(input$gender_p), age = input$age_p, hypertension = as.integer(input$hypertension_p), heart_disease = as.integer(input$heart_p), work_type =as.integer(input$worktype_p), Residence_type =as.integer(input$residence_p), avg_glucose_level = input$glucose_p, bmi = input$bmi_p), type = "response")*100
+      cat("Khả năng bị đột quỵ của người này là ",probability , "%")
     }
   )
 
